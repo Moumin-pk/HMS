@@ -2,7 +2,81 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome HMS</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hospital Management System</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">Hospital Management</div>
+            <ul>
+                <li><a href="#features">Features</a></li>
+                <li><a href="#benefits">Benefits</a></li>
+                <li><a href="#contact">Contact</a></li>
+                <li><a href="#demo" class="cta">Get a Demo</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section class="hero">
+            <h1>Efficient Hospital Management System</h1>
+            <p>Improve patient care, streamline operations, and enhance data management with our comprehensive hospital management system.</p>
+            <a href="#demo" class="cta">Request a Demo</a>
+        </section>
+        <section id="features" class="features">
+            <h2>Key Features</h2>
+            <div class="feature-list">
+                <div class="feature">
+                    <img src="ihttps://img.freepik.com/free-photo/specialist-giving-prescription-paper-sick-patient-checkup-visit_482257-27197.jpg?t=st=1723103364~exp=1723106964~hmac=d28c441bd03f0eaf70e865a32b510d51fdb6d0cbaf550acdac4fc826b3fa29ee&w=900" alt="Feature 1">
+                    <h3>Patient Management</h3>
+                    <p>Keep track of patient records, appointments, and medical history seamlessly.</p>
+                </div>
+                <div class="feature">
+                    <img src="https://img.freepik.com/free-photo/medic-giving-advice-man-sitting-wheelchair-checkup-visit-general-practitioner-meeting-with-patient-with-disability-consultation-appointment-people-talking-cabinet_482257-36777.jpg?t=st=1723103404~exp=1723107004~hmac=605f825052a32fd14d2d7627e94d9b5b9b43dc9ce7c0f335094a27dc529fe81c&w=900" alt="Feature 2">
+                    <h3>Staff Scheduling</h3>
+                    <p>Efficiently manage staff schedules and ensure optimal resource allocation.</p>
+                </div>
+                <div class="feature">
+                    <img src="ihttps://img.freepik.com/free-photo/specialist-explaining-radiography-diagnosis-patient-with-disease-medical-appointment-healthcare-practitioner-showing-x-ray-scan-results-sick-man-annual-checkup-visit_482257-32031.jpg?t=st=1723103429~exp=1723107029~hmac=341cb2e31a74b5c3257b9633643cc59d653101b7de28173b167568657f2cc3e3&w=900" alt="Feature 3">
+                    <h3>Billing and Invoicing</h3>
+                    <p>Automate billing processes and ensure accurate invoicing.</p>
+                </div>
+            </div>
+        </section>
+        <section id="benefits" class="benefits">
+            <h2>Benefits</h2>
+            <ul>
+                <li>Enhanced patient care</li>
+                <li>Streamlined operations</li>
+                <li>Accurate data management</li>
+                <li>Improved staff productivity</li>
+            </ul>
+        </section>
+        <section id="contact" class="contact">
+            <h2>Contact Us</h2>
+            <form action="submit_form.php" method="post">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" required>
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+                <label for="message">Message:</label>
+                <textarea id="message" name="message" required></textarea>
+                <button type="submit">Submit</button>
+            </form>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2024 Hospital Management System. All rights reserved.</p>
+    </footer>
+</body>
+</html>
+
+
+
+
