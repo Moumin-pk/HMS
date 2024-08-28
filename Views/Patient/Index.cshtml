@@ -1,0 +1,63 @@
+﻿@model IEnumerable<HMS.Models.Patient>
+
+@{
+    ViewData["Title"] = "Patient List";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<div class="container mt-5">
+    <div class="row mb-3">
+        <div class="col">
+            <h1 class="display-4">@ViewData["Title"]</h1>
+        </div>
+
+        
+        <div class="col text-end">
+            <a asp-action="Create" class="btn btn-primary">Create New</a>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-hover table-striped">
+            <thead class="table-dark">
+                <tr>
+                    <th>@Html.DisplayNameFor(model => model.Id)</th>
+                    <th>@Html.DisplayNameFor(model => model.Name)</th>
+                    <th>@Html.DisplayNameFor(model => model.ContactNumber)</th>
+                    <th>@Html.DisplayNameFor(model => model.Email)</th>
+                    <th>@Html.DisplayNameFor(model => model.Age)</th>
+                    <th>@Html.DisplayNameFor(model => model.DoctorId)</th>
+                    <th>@Html.DisplayNameFor(model => model.AdmissionDate)</th>
+                    <th>@Html.DisplayNameFor(model => model.DiscahrgeDate)</th>
+                    <th>@Html.DisplayNameFor(model => model.Gender)</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem => item.Id)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                        <td>@Html.DisplayFor(modelItem => item.ContactNumber)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Email)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Age)</td>
+                        <td>@Html.DisplayFor(modelItem => item.DoctorId)</td>
+                        <td>@Html.DisplayFor(modelItem => item.AdmissionDate)</td>
+                        <td>@Html.DisplayFor(modelItem => item.DiscahrgeDate)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Gender)</td>
+                        <td>
+                            @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+
+                            @Html.ActionLink("Details", "Details", new { Id = item.Id }) |
+
+                       @Html.ActionLink("Delete", "Delete", new { id = item.Id, name = item.Name, Email = item.Email , ContactNumber = item.ContactNumber , Age = item.Age  , DiscahrgeDate = item.DiscahrgeDate  })
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

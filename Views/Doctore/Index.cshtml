@@ -1,0 +1,60 @@
+﻿@model IEnumerable<HMS.Models.Doctore>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-5">
+    <div class="row mb-3">
+        <div class="col">
+            <h1 class="display-4">@ViewData["Title"]</h1>
+        </div>
+
+        <div class="col text-end">
+            <a asp-action="Create" class="btn btn-primary">Create New</a>
+        </div>
+    </div>
+
+    <form asp-controller="Doctore" asp-action="Index" method="get">
+        <input type="search" name="searchTerm" value="@ViewData["SearchTerm"]" class="form-control" />
+        <button type="submit" class="btn btn-primary">Search</button>
+        <button type="button" onclick="resetSearch()" class="btn btn-secondary">Reset</button>
+    </form>
+
+    <div class="table-responsive">
+        <table class="table table-hover table-striped">
+            <thead class="table-dark">
+                <tr>
+                    <th>@Html.DisplayNameFor(model => model.Id)</th>
+                    <th>@Html.DisplayNameFor(model => model.Name)</th>
+                    <th>@Html.DisplayNameFor(model => model.Specialization)</th>
+                    <th>@Html.DisplayNameFor(model => model.Experience)</th>
+                    <th>@Html.DisplayNameFor(model => model.ContactNumber)</th>
+                    <th>@Html.DisplayNameFor(model => model.Email)</th>
+                    <th>@Html.DisplayNameFor(model => model.DepartmentId)</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem => item.Id)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Specialization)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Experience)</td>
+                        <td>@Html.DisplayFor(modelItem => item.ContactNumber)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Email)</td>
+                        <td>@Html.DisplayFor(modelItem => item.DepartmentId)</td>
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Edit</a>
+                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info">Details</a>
+                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
