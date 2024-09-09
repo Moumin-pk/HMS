@@ -1,101 +1,117 @@
-﻿using HMS.Data;
-using HMS.Models;
+﻿using HMS.Abstraction;
+using HMS.Data.Models;
+using HMS.Extensions;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Threading.Tasks;
 
 namespace HMS.Controllers
 {
     public class BillingController : Controller
     {
-        public static List<Billing> _Billing= Seeds.SeedBilling();
+        private readonly IBillingServices _billingServices;
 
-
-        /*public IActionResult Index(string searchTerm)
+        // Constructor
+        public BillingController(IBillingServices billingServices)
         {
-            var appointment = _Appointment.AsQueryable();
-
-            if (!string.IsNullOrEmpty(searchTerm))
-            {
-                appointment = appointment.Where(d => d.Purpose.Contains(searchTerm));
-            }
-
-            ViewData["CurrentFilter"] = searchTerm;
-            return View(appointment.ToList());
-        }*/
-
-        public IActionResult Index()
-        {
-            return View(_Billing);
+            _billingServices = billingServices;
         }
 
-        // Create
+        // Index Page - List all billing records
+        public async Task<IActionResult> Index()
+        {
+            var billingRecords = await _billingServices.GetAllBillingRecordsAsync();
+            return View(billingRecords);
+        }
+
+        // Create Page
         public IActionResult Create()
         {
             return View();
         }
 
-        public IActionResult CreateBilling(Billing billing)
+        // POST: Billing/Create
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(Billing billing)
         {
-            _Billing.Add(billing);
-            return RedirectToAction("Index");
-        }
-
-        // Edit
-
-        public IActionResult Edit(Guid id)
-        {
-
-            var billing = _Billing.FirstOrDefault(x => x.Id == id);
+            if (ModelState.IsValid)
+            {
+                billing.Id = GuidExtensions.NewGuid(); // Assuming GuidExtensions.NewGuid() generates a new GUID
+                await _billingServices.AddBillingRecord(billing);
+                return RedirectToAction(nameof(Index));
+            }
 
             return View(billing);
         }
 
-
-
-        [HttpPost]
-        public IActionResult Edit(Billing billing)
+        // Edit Page
+        public async Task<IActionResult> Edit(Guid id)
         {
-
-
-            foreach (var item in _Billing)
+            var billing = await _billingServices.GetBillingById(id);
+            if (billing == null)
             {
-                if (billing.Id == item.Id)
+                return NotFound();
+            }
+            return View(billing);
+        }
+
+        // POST: Billing/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(Guid id, Billing billing)
+        {
+            if (id != billing.Id)
+            {
+                return BadRequest();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
                 {
-                    item.Id = billing.Id;
-                    item.PatientId = billing.PatientId;
-                    item.DoctoreId = billing.DoctoreId;
-                    item.BillingDate = billing.BillingDate; 
-                    item.Amount = billing.Amount;
-                    item.IsPaid = billing.IsPaid;   
+                    await _billingServices.UpdateBillingRecord(billing);
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (Exception ex)
+                {
+                    // Handle exceptions (e.g., logging)
+                    ModelState.AddModelError(string.Empty, "Unable to save changes.");
                 }
             }
-            return RedirectToAction("Index");
-        }
 
-
-        public IActionResult Details(Guid id)
-        {
-
-            var billing = _Billing.FirstOrDefault(p => p.Id == id);
             return View(billing);
         }
 
-
-
-
-
-        public IActionResult Delete(Guid id)
+        // Details Page
+        public async Task<IActionResult> Details(Guid id)
         {
-
-            var billing = _Billing.FirstOrDefault(x => x.Id == id);
+            var billing = await _billingServices.GetBillingById(id);
+            if (billing == null)
+            {
+                return NotFound();
+            }
             return View(billing);
         }
 
+        // Delete Page
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            var billing = await _billingServices.GetBillingById(id);
+            if (billing == null)
+            {
+                return NotFound();
+            }
+            return View(billing);
+        }
+
+        // POST: Billing/Delete/5
         [HttpPost, ActionName("Delete")]
-        public IActionResult DeleteConfirm(Guid id)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SoftDelete(Guid id)
         {
-            var removeBilling = _Billing.FirstOrDefault(d => d.Id == id);
-            _Billing.Remove(removeBilling);
-            return RedirectToAction("Index");
+            await _billingServices.SoftDeleteBillingRecord(id);
+            return RedirectToAction(nameof(Index));
         }
     }
 }

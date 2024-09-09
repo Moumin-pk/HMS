@@ -1,5 +1,5 @@
-﻿using HMS.Data;
-using HMS.Models;
+﻿/*using HMS.Data;
+using HMS.Data.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HMS.Controllers
@@ -9,7 +9,7 @@ namespace HMS.Controllers
         public static List<Appointment> _Appointment = Seeds.SeedAppointment();
 
 
-        /*public IActionResult Index(string searchTerm)
+        *//*public IActionResult Index(string searchTerm)
         {
             var appointment = _Appointment.AsQueryable();
 
@@ -20,7 +20,7 @@ namespace HMS.Controllers
 
             ViewData["CurrentFilter"] = searchTerm;
             return View(appointment.ToList());
-        }*/
+        }*//*
 
         public IActionResult Index()
         {
@@ -66,7 +66,7 @@ namespace HMS.Controllers
                     item.AppointmentDate = appointment.AppointmentDate;
                     item.Purpose = appointment.Purpose;
                     item.IsCompleted = appointment.IsCompleted;
-                   
+
                 }
             }
             return RedirectToAction("Index");
@@ -105,3 +105,4 @@ namespace HMS.Controllers
 
     }
 }
+*/

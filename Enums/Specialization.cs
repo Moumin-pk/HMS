@@ -2,11 +2,11 @@
 {
     public enum Specialization
     {
-        Cardiology,
-        Neurology,
-        GeneralMedicine,
-        Orthopedics,
-        Radiology,
-        Psychiatry
+        Cardiology = 1,
+        Neurology = 2,
+        GeneralMedicine = 3,
+        Orthopedics = 4,
+        Radiology = 5,
+        Psychiatry = 6
     }
 }

@@ -1,23 +1,37 @@
-﻿using HMS.Abstraction;
-using HMS.Data;
-using HMS.Extensions;
-using HMS.Models;
+﻿
 using Microsoft.AspNetCore.Mvc;
+using HMS.Abstraction;
+using HMS.Data.Models;
+using System.Diagnostics.Metrics;
+using Microsoft.EntityFrameworkCore;
+using HMS.Services;
+using HMS.Extensions;
+using FluentValidation;
 
 namespace HMS.Controllers
 {
     public class PatientController : Controller
     {
         // Inject Services
+       
         private readonly IPatientServices _patientService;
+
+        // controller
         public PatientController(IPatientServices patientServices)
         {
+
             _patientService = patientServices;
+           
         }
 
-        public IActionResult Index(string SearchTerm)
+
+        //  patient index ->  add Search Funcnality
+
+
+        public async Task<IActionResult> Index(string SearchTerm)
         {
-            List<Patient> patients = _patientService.GetPatients(); // Assuming GetPatients returns a List<Patient>
+            // Asynchronously retrieve the list of patients
+            var patients = await _patientService.GetPatients(); // Assuming GetPatients returns a List<Patient>
 
             var filteredPatients = patients.AsQueryable();
 
@@ -31,8 +45,10 @@ namespace HMS.Controllers
                 );
             }
 
+            // Pass the current search term to the view
             ViewData["CurrentFilter"] = SearchTerm;
 
+            // Return the filtered list to the view
             return View(filteredPatients.ToList());
         }
 
@@ -40,63 +56,89 @@ namespace HMS.Controllers
         // Create
         public IActionResult Create()
         {
+            var Genderlist = _patientService.GetGender();
+            ViewBag.Genderlist = Genderlist;
             return View();
         }
 
+        //  Create new Patient
 
+        [HttpPost]
         public IActionResult CreatePatient(Patient patient)
         {
+            patient.Id = GuidExtensions.NewGuid();
             _patientService.AddPatient(patient);
             return RedirectToAction("Index");
         }
 
-        // Edit
 
-        public IActionResult Edit(Guid id)
+        
+
+
+        public async Task<IActionResult> Edit(Guid id)
         {
+            var Genderlist = _patientService.GetGender();
+            ViewBag.Genderlist = Genderlist;
+            var patient = await _patientService.GetPatientById(id);
 
-            var patient = _patientService.GetPatientById(id);
 
             return View(patient);
         }
 
 
-
+        // POST: Departments/Edit/5
         [HttpPost]
-        public IActionResult Edit(Patient patient)
+        public async Task<IActionResult> Edit(Patient patient)
         {
-            Patient _patients = _patientService.GetPatientById(patient.Id);
+            await _patientService.UpdatePatient(patient);
+            return RedirectToAction("Index");
+        }
 
-            if(_patients != null )
+
+
+
+
+
+
+
+
+
+
+        public async Task<IActionResult> Details(Guid id)
+        {
+            var patient = await _patientService.GetPatientById(id);
+
+            if (patient == null)
             {
-                _patientService.RemovePatient(_patients);
-                _patientService.AddPatient(patient);   
+                return NotFound();
             }
-            
-            return RedirectToAction("Index");
-        }
 
-
-        public IActionResult Details(Guid Id)
-        {
-           var patient = _patientService.GetPatientById(Id); 
             return View(patient);
         }
 
-
-        public IActionResult Delete(Patient patient)
+       
+        public async Task<IActionResult> Delete(Guid id)
         {
+            var patient = await _patientService.GetPatientById(id);
+
+            if (patient == null)
+            {
+                return NotFound();
+            }
+
             return View(patient);
         }
 
+        // POST: Doctors/Delete/5
         [HttpPost, ActionName("Delete")]
-        public IActionResult DeleteConfirm(Guid Id)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SoftDelete(Guid id)
         {
-            _patientService.RemovePatient(Id);
-            return RedirectToAction("Index");
+            await _patientService.softDelete(id);
+            return RedirectToAction(nameof(Index));
         }
-
 
 
     }
 }
+

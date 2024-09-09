@@ -1,111 +1,125 @@
-﻿using HMS.Data;
-using HMS.Models;
+﻿using HMS.Abstraction;
+using HMS.Data.Models;
+using HMS.Extensions;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Threading.Tasks;
 
 namespace HMS.Controllers
 {
     public class DoctoreController : Controller
     {
-        public static List<Doctore> _Doctore = Seeds.SeedDoctore();
+        private readonly IDoctoreServices _doctoreServices;
 
-
-        public IActionResult Index(string SearchTerm)
+        // Controller 
+        public DoctoreController(IDoctoreServices doctoreServices)
         {
-           /* List<Patient> patients = _patientService.GetPatients(); // Assuming GetPatients returns a List<Patient>*/
-
-            var filteredPatients = _Doctore.AsQueryable();
-
-            if (!string.IsNullOrEmpty(SearchTerm))
-            {
-                // Search by name, contact number, and email (case-insensitive)
-                filteredPatients = filteredPatients.Where(p =>
-                    p.Name.ToLower().Contains(SearchTerm.ToLower()) ||
-                    p.ContactNumber.Contains(SearchTerm) ||
-                    p.Email.ToLower().Contains(SearchTerm.ToLower())
-                );
-            }
-
-            ViewData["CurrentFilter"] = SearchTerm;
-
-            return View(filteredPatients.ToList());
+            _doctoreServices = doctoreServices;
         }
 
-        // Create
-        public IActionResult Create()
+        //  Doctore Index Page
+        public async Task<IActionResult> Index()
         {
-            return View();
-        }
-
-        public IActionResult CreateDoctore(Doctore doctore)
-        {
-            _Doctore.Add(doctore);
-            return RedirectToAction("Index");
-        }
-
-        // Edit
-
-        public IActionResult Edit(Guid id)
-        {
-
-            var doctore = _Doctore.FirstOrDefault(x => x.Id == id);
-
+            var doctore = await _doctoreServices.GetAllDoctorsAsync();
             return View(doctore);
         }
 
 
 
-        [HttpPost]
-        public IActionResult Edit(Doctore doctore)
+        public IActionResult Create()
         {
+            var specialtyList = _doctoreServices.GetDoctorSpecialties();
+            ViewBag.SpecialtyList = specialtyList;
+            return View();
+        }
 
 
-            foreach (var item in _Doctore)
+        public async Task<IActionResult> CreateDoctore(Doctor doctore)
+        {
+            if (doctore != null)
             {
-                if (doctore.Id == item.Id)
+                doctore.Id = GuidExtensions.NewGuid();
+                await _doctoreServices.AddDoctore(doctore);
+                return RedirectToAction("Index");
+            }
+
+            return View(doctore);
+        }
+
+        // Doctore Edit Page
+        public async Task<IActionResult> Edit(Guid id)
+        {
+            var specialtyList = _doctoreServices.GetDoctorSpecialties();
+            ViewBag.SpecialtyList = specialtyList;
+
+            var doctore = await _doctoreServices.GetDoctoreById(id);
+            if (doctore == null)
+            {
+                return NotFound();
+            }
+            return View(doctore);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(Guid id, Doctor doctor)
+        {
+            if (id != doctor.Id)
+            {
+                return BadRequest();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
                 {
-                    item.Id = doctore.Id;
-                    item.Name = doctore.Name;
-                    item.Specialization = doctore.Specialization;
-                    item.Experience = doctore.Experience;   
-                    item.ContactNumber = doctore.ContactNumber; 
-                    item.Email = doctore.Email;
-                    item.DepartmentId = doctore.DepartmentId;
+                    _doctoreServices.UpdateDoctore(doctor);
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (Exception ex)
+                {
+                    // Handle exceptions (e.g., logging)
+                    ModelState.AddModelError(string.Empty, "Unable to save changes.");
                 }
             }
-            return RedirectToAction("Index");
+
+            return View(doctor);
         }
 
-
-        public IActionResult Details(Guid id)
+        // Details
+        public async Task<IActionResult> Details(Guid id)
         {
-
-            var patient = _Doctore.FirstOrDefault(p => p.Id == id);
-
-            return View(patient);
+            var doctoreDetail = await _doctoreServices.GetDoctoreById(id);
+            if(doctoreDetail == null)
+            {
+                return null;
+            }
+            return View(doctoreDetail);
         }
 
-
-
-
-
-        public IActionResult Delete(Guid id)
+        // Delete
+        public async Task<IActionResult> Delete(Guid Id)
         {
-
-            var patient = _Doctore.FirstOrDefault(x => x.Id == id);
-
-            return View(patient);
+            var doctore = await _doctoreServices.GetDoctoreById(Id);
+            if (doctore == null)
+            {
+                return NotFound();
+            }
+            return View(doctore);
         }
 
+        // POST: Doctors/Delete/5
         [HttpPost, ActionName("Delete")]
-        public IActionResult DeleteConfirm(Guid id)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SoftDelete(Guid id)
         {
-            var removepatient = _Doctore.FirstOrDefault(d => d.Id == id);
-            _Doctore.Remove(removepatient);
-            return RedirectToAction("Index");
+            await _doctoreServices.softDelete(id);
+            return RedirectToAction(nameof(Index));
         }
 
 
+
+        
 
     }
 }
-

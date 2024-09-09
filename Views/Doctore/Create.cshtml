@@ -1,4 +1,4 @@
-﻿@model HMS.Models.Doctore
+﻿@model HMS.Data.Models.Doctor
 
 @{
     ViewData["Title"] = "Create";
@@ -32,8 +32,10 @@
                 </div>
 
                 <div class="mb-3">
-                    <label asp-for="Specialization" class="form-label"></label>
-                    <input asp-for="Specialization" class="form-control" />
+                    <label asp-for="Specialization" class="form-label">Select Specialty:</label>
+                    <select asp-for="Specialization" asp-items="@ViewBag.SpecialtyList" class="form-control">
+                        <option value="">-- Select Specialty --</option>
+                    </select>
                     <span asp-validation-for="Specialization" class="text-danger"></span>
                 </div>
 

@@ -1,79 +1,77 @@
-﻿@using HMS.Enums
-@model HMS.Models.Patient
+﻿@model HMS.Data.Models.Patient
 
 @{
-    ViewData["Title"] = "Create Patient";
+    ViewData["Title"] = "Create";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="container mt-5">
-    <div class="row mb-3">
-        <div class="col">
-            <h1 class="display-4">@ViewData["Title"]</h1>
-            <h4>Patient Information</h4>
-            <hr />
-        </div>
-    </div>
+<h1>Create</h1>
 
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <form asp-action="CreatePatient" class="shadow p-4 rounded bg-light mb-5">
-                <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
-
-                <div class="mb-3">
-                    <label asp-for="Name" class="form-label"></label>
-                    <input asp-for="Name" class="form-control" />
-                    <span asp-validation-for="Name" class="text-danger"></span>
-                </div>
-
-                <div class="mb-3">
-                    <label asp-for="ContactNumber" class="form-label"></label>
-                    <input asp-for="ContactNumber" class="form-control" />
-                    <span asp-validation-for="ContactNumber" class="text-danger"></span>
-                </div>
-
-                <div class="mb-3">
-                    <label asp-for="Email" class="form-label"></label>
-                    <input asp-for="Email" class="form-control" />
-                    <span asp-validation-for="Email" class="text-danger"></span>
-                </div>
-
-                <div class="mb-3">
-                    <label asp-for="Age" class="form-label"></label>
-                    <input asp-for="Age" class="form-control" />
-                    <span asp-validation-for="Age" class="text-danger"></span>
-                </div>
-
-                <div class="mb-3">
-                    <label asp-for="AdmissionDate" class="form-label"></label>
-                    <input asp-for="AdmissionDate" class="form-control" />
-                    <span asp-validation-for="AdmissionDate" class="text-danger"></span>
-                </div>
-
-                <div class="mb-3">
-                    <label asp-for="DiscahrgeDate" class="form-label"></label>
-                    <input asp-for="DiscahrgeDate" class="form-control" />
-                    <span asp-validation-for="DiscahrgeDate" class="text-danger"></span>
-                </div>
-
-                <div class="mb-3">
-                    <label asp-for="Gender" class="form-label"></label>
-                    <div class="form-check">
-                        <input type="radio" asp-for="Gender" value="@Gender.Male" class="form-check-input" id="genderMale" />
-                        <label class="form-check-label" for="genderMale">Male</label>
-                    </div>
-                    <div class="form-check">
-                        <input type="radio" asp-for="Gender" value="@Gender.Female" class="form-check-input" id="genderFemale" />
-                        <label class="form-check-label" for="genderFemale">Female</label>
-                    </div>
-                    <span asp-validation-for="Gender" class="text-danger"></span>
-                </div>
-
-                <div class="d-grid">
-                    <input type="submit" value="Create" class="btn btn-primary btn-lg" />
-                </div>
-            </form>
-        </div>
-    </div>
+<h4>Patient</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Id" class="control-label"></label>
+                <input asp-for="Id" class="form-control" />
+                <span asp-validation-for="Id" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Age" class="control-label"></label>
+                <input asp-for="Age" class="form-control" />
+                <span asp-validation-for="Age" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Gender" class="control-label"></label>
+                <input asp-for="Gender" class="form-control" />
+                <span asp-validation-for="Gender" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ContactNumber" class="control-label"></label>
+                <input asp-for="ContactNumber" class="form-control" />
+                <span asp-validation-for="ContactNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Email" class="control-label"></label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AddressId" class="control-label"></label>
+                <select asp-for="AddressId" class ="form-control" asp-items="ViewBag.AddressId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="DoctorId" class="control-label"></label>
+                <select asp-for="DoctorId" class ="form-control" asp-items="ViewBag.DoctorId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="AdmissionDate" class="control-label"></label>
+                <input asp-for="AdmissionDate" class="form-control" />
+                <span asp-validation-for="AdmissionDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DischargeDate" class="control-label"></label>
+                <input asp-for="DischargeDate" class="form-control" />
+                <span asp-validation-for="DischargeDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
     </div>
 </div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
