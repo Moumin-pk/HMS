@@ -16,14 +16,34 @@
         </div>
     </div>
 
-    <form asp-controller="Doctore" asp-action="Index" method="get">
-        <input type="search" name="searchTerm" value="@ViewData["SearchTerm"]" class="form-control" />
-        <button type="submit" class="btn btn-primary">Search</button>
-        <button type="button" onclick="resetSearch()" class="btn btn-secondary">Reset</button>
-    </form>
+    <div class="d-flex align-items-center justify-content-between mx-4">
+        @* Search *@
+        <form asp-controller="Doctore" asp-action="Index" method="get" class="mb-3">
+            <div class="input-group">
+                <input type="search" name="searchTerm" value="@ViewData["SearchTerm"]" class="form-control" placeholder="Search items...">
+                <button type="submit" class="btn btn-primary">Search</button>
+                <button type="button" id="resetButton" class="btn btn-secondary">Reset</button>
+            </div>
+        </form>
+
+
+        @* Pagination *@
+        <nav>
+            <ul class="pagination justify-content-center" id="paginationControls">
+                <!-- Pagination items will be dynamically inserted here -->
+            </ul>
+        </nav>
+    </div>
+
+
+     @* <form asp-controller="Doctore" asp-action="Index" method="get">
+         <input type="search" name="searchTerm" value="@ViewData["SearchTerm"]" class="form-control" />
+         <button type="submit" class="btn btn-primary">Search</button>
+         <button type="submit" class="btn btn-secondary" value="">Reset</button>
+     </form> *@
 
     <div class="table-responsive">
-        <table class="table table-hover table-striped">
+        <table id="PatientTable" class="table table-hover table-striped">
             <thead class="table-dark">
                 <tr>
                     <th>@Html.DisplayNameFor(model => model.Id)</th>
@@ -58,3 +78,12 @@
         </table>
     </div>
 </div>
+
+
+<script>
+    document.getElementById('resetButton').addEventListener('click', function () {
+        window.location.href = '@Url.Action("Index", "Doctore")';
+    });
+</script>
+
+

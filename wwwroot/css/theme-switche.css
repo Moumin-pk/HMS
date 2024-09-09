@@ -1,0 +1,38 @@
+﻿/* Default light theme */
+body {
+    background-color: #ffffff;
+    color: #000000;
+}
+
+    /* Dark theme */
+    body.dark-mode {
+        background-color: #000000;
+        color: #ffffff;
+    }
+
+        /* Optional: Change button styles for dark mode */
+        body.dark-mode #theme-toggle {
+            background-color: #333;
+            color: #fff;
+        }
+
+        body.dark-mode .navbar-nav .nav-link {
+            color: #fff; /* or any other color you prefer for dark mode */
+        }
+
+            body.dark-mode .navbar-nav .nav-link:hover {
+                color: #fff; /* or any other color you prefer for dark mode */
+            }
+
+        body.dark-mode .navbar {
+            background-color: #333; /* or any other color you prefer for dark mode */
+        }
+.dark-mode .table-dark {
+    background-color: #444;
+    color: #fff;
+}
+
+.dark-mode .table tbody {
+    background-color: #333;
+    color: #fff;
+}

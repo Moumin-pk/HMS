@@ -26,7 +26,7 @@ width: 120px;
 header {
     margin-top:-20px;
     background-color: transparent;
-    color: white;
+/*    color: white;*/
     padding: 20px 0;
 }
 
@@ -43,20 +43,19 @@ header {
     }
 
         header nav ul li a {
-            color: white;
             text-decoration: none;
         }
 
 #hero {
     background: url('hospital.jpg');
-    color: white;
+/*    color: white;*/
     text-align: center;
     padding: 5rem 0;
 }
 
     #hero .btn {
         background-color: #4CAF50;
-        color: white;
+/*        color: white;*/
         padding: 0.5rem 1rem;
         text-decoration: none;
         border-radius: 5px;
@@ -81,7 +80,7 @@ header {
 
 footer {
     background-color: #333;
-    color: white;
+/*    color: white;*/
     text-align: center;
     padding: 1rem 0;
 }
@@ -92,6 +91,17 @@ footer {
     border: 1px solid gray;
     box-shadow:2px 2px 15px gray;
 }
+// theme switcher
+/* Dark mode styles */
+.dark-mode {
+    background-color: #333;
+    color: #fff;
+}
 
+/* Light mode styles */
+.light-mode {
+    background-color: #fff;
+    color: #333;
+}
 
 

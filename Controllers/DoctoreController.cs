@@ -9,17 +9,25 @@ namespace HMS.Controllers
         public static List<Doctore> _Doctore = Seeds.SeedDoctore();
 
 
-        public IActionResult Index(string searchTerm)
+        public IActionResult Index(string SearchTerm)
         {
-            var doctore = _Doctore .AsQueryable();
+           /* List<Patient> patients = _patientService.GetPatients(); // Assuming GetPatients returns a List<Patient>*/
 
-            if (!string.IsNullOrEmpty(searchTerm))
+            var filteredPatients = _Doctore.AsQueryable();
+
+            if (!string.IsNullOrEmpty(SearchTerm))
             {
-                doctore = doctore.Where(d => d.Name.Contains(searchTerm));
+                // Search by name, contact number, and email (case-insensitive)
+                filteredPatients = filteredPatients.Where(p =>
+                    p.Name.ToLower().Contains(SearchTerm.ToLower()) ||
+                    p.ContactNumber.Contains(SearchTerm) ||
+                    p.Email.ToLower().Contains(SearchTerm.ToLower())
+                );
             }
 
-            ViewData["CurrentFilter"] = searchTerm;
-            return View(doctore.ToList());
+            ViewData["CurrentFilter"] = SearchTerm;
+
+            return View(filteredPatients.ToList());
         }
 
         // Create
@@ -100,3 +108,4 @@ namespace HMS.Controllers
 
     }
 }
+

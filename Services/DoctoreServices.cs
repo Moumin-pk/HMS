@@ -4,5 +4,6 @@ namespace HMS.Services
 {
     public class DoctoreServices : IDoctoreServices
     {
+
     }
 }

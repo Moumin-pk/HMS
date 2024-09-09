@@ -15,17 +15,34 @@ namespace HMS.Controllers
             _patientService = patientServices;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(string SearchTerm)
         {
-            List<Patient> patient = _patientService.GetPatients();
-            return View(patient);
+            List<Patient> patients = _patientService.GetPatients(); // Assuming GetPatients returns a List<Patient>
+
+            var filteredPatients = patients.AsQueryable();
+
+            if (!string.IsNullOrEmpty(SearchTerm))
+            {
+                // Search by name, contact number, and email (case-insensitive)
+                filteredPatients = filteredPatients.Where(p =>
+                    p.Name.ToLower().Contains(SearchTerm.ToLower()) ||
+                    p.ContactNumber.Contains(SearchTerm) ||
+                    p.Email.ToLower().Contains(SearchTerm.ToLower())
+                );
+            }
+
+            ViewData["CurrentFilter"] = SearchTerm;
+
+            return View(filteredPatients.ToList());
         }
+
 
         // Create
         public IActionResult Create()
         {
             return View();
         }
+
 
         public IActionResult CreatePatient(Patient patient)
         {
@@ -35,37 +52,29 @@ namespace HMS.Controllers
 
         // Edit
 
-        /* public IActionResult Edit(Guid id)
-         {
+        public IActionResult Edit(Guid id)
+        {
 
-             var patient = _patients.FirstOrDefault(x => x.Id == id);
+            var patient = _patientService.GetPatientById(id);
 
-             return View(patient);
-         }
- */
+            return View(patient);
+        }
 
 
-        /*[HttpPost]
+
+        [HttpPost]
         public IActionResult Edit(Patient patient)
         {
-            
+            Patient _patients = _patientService.GetPatientById(patient.Id);
 
-            foreach (var item in _patients)
+            if(_patients != null )
             {
-                if (patient.Id == item.Id)
-                {
-                    item.Id = patient.Id;
-                    item.Name = patient.Name;
-                    item.Address = patient.Address;
-                    item.Age = patient.Age;
-                    item.Gender = patient.Gender;
-                    item.DiscahrgeDate = patient.DiscahrgeDate;
-                    item.AdmissionDate = patient.AdmissionDate;
-                    item.ContactNumber = patient.ContactNumber;
-                }
+                _patientService.RemovePatient(_patients);
+                _patientService.AddPatient(patient);   
             }
+            
             return RedirectToAction("Index");
-        }*/
+        }
 
 
         public IActionResult Details(Guid Id)

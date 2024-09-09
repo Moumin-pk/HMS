@@ -21,6 +21,7 @@ namespace HMS.Services
 
         public void AddPatient(Patient patient)
         {
+            
             patient.Id = GuidExtensions.NewGuid();
             _patients.Add(patient);
         }
